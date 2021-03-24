@@ -11,7 +11,7 @@ Here are the guidelines:
 * Ensure your work is packaged in a way such that it is easy to set up the environment and to perform end-to-end run of the pipeline.
 * Please include instructions for the setup.
 * It is sufficient to train a simple model that predicts the install probabilities of ad impressions. Time consuming tasks like advanced feature engineering and hyper-parameter tuning are not required.
-* ReportROC AUC and log-loss of your model. Note that these are not the main criteria we use for evaluating the homework
+* Report ROC AUC and log-loss of your model. Note that these are not the main criteria we use for evaluating the homework
 * Keep your code organized and clean.
 
 **Deliverables**
