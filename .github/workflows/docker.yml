@@ -13,7 +13,7 @@ jobs:
       - name: Login to DockerHub Registry
         run: echo ${{ secrets.DOCKERHUB_PASS }} | docker login -u ${{ secrets.DOCKERHUB_USER }} --password-stdin
       - name: Build the Preprocess image
-        run: docker build ./preprocess_data --tag prany/exercise_preprocessing
+        run: docker build ./preprocess --tag prany/exercise_preprocessing
       - name: Push the Preprocess image
         run: docker push prany/exercise_preprocessing
       - name: Build the Train image
@@ -25,6 +25,6 @@ jobs:
       - name: Push the Test image
         run: docker push prany/exercise_test
       - name: Build the Deploy image
-        run: docker build ./deploy_model --tag prany/exercise_deploy_model
+        run: docker build ./deploy --tag prany/exercise_deploy
       - name: Push the Deploy image
         run: docker push prany/exercise_deploy_model

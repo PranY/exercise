@@ -5,7 +5,6 @@ import pickle
 import re
 
 from collections import defaultdict
-from pathlib import Path
 from sklearn.preprocessing import LabelEncoder
 
 train_path = '../data/training_data.csv'
@@ -91,7 +90,7 @@ def add_encoding(df, cols):
         le.fit(list(df[c].unique()))
         # Preserving the encoder in a 'column:encoder' dict for inverse transform
         le_dict[c].append(le)
-        df[c+'_encoded'] = le.transform(list(df[c].astype(str)))
+        df[c + '_encoded'] = le.transform(list(df[c].astype(str)))
     df.drop(cols, axis=1, inplace=True)
     return df, le_dict
 
@@ -100,7 +99,7 @@ def preprocess(df, tag):
     r"""Preprocess the data frame and returns.
     Args:
         df: input dataframe
-        tag: a string tag for train/test
+        tag: a string tag for train / test
     Returns:
         df: processed dataframe
     """
@@ -115,7 +114,7 @@ def preprocess(df, tag):
         df['timestamp'], infer_datetime_format=True)
     df['lastStart'] = pd.to_datetime(
         df['lastStart'], infer_datetime_format=True)
-    df['deltaTime'] = df['timestamp']-df['lastStart']
+    df['deltaTime'] = df['timestamp'] - df['lastStart']
     df['deltaTime'].fillna(pd.Timedelta(
         df['deltaTime'].median(), unit='s'), inplace=True)
 
@@ -124,7 +123,7 @@ def preprocess(df, tag):
     add_datepart(df, 'deltaTime', time=True)
 
     df['delayBucket'] = pd.cut(df['deltaTimeElapsed'],
-                               [0, 60, 60*60, 60*60*24, 60*60*24*7, 60*60*24*365], labels=[1, 2, 3, 4, 5])
+                               [0, 60, 60 * 60, 60 * 60 * 24, 60 * 60 * 24 * 7, 60 * 60 * 24 * 365], labels=[1, 2, 3, 4, 5])
 
     feature_exclude = ['id', 'deviceType']
     df.drop(feature_exclude, axis=1, inplace=True)
@@ -147,15 +146,15 @@ def preprocess(df, tag):
         df.drop(encode_cols, axis=1, inplace=True)
 
     print('>>> adding ratio features')
-    df['ctre'] = df['clickCount']/df['startCount']
-    df['vtre'] = df['viewCount']/df['startCount']
-    df['etre'] = df['installCount']/df['startCount']
-    df['ctr1d'] = df['clickCount']/df['startCount1d']
-    df['vtr1d'] = df['viewCount']/df['startCount1d']
-    df['etr1d'] = df['installCount']/df['startCount1d']
-    df['ctr7d'] = df['clickCount']/df['startCount7d']
-    df['vtr7d'] = df['viewCount']/df['startCount7d']
-    df['etr7d'] = df['installCount']/df['startCount7d']
+    df['ctre'] = df['clickCount'] / df['startCount']
+    df['vtre'] = df['viewCount'] / df['startCount']
+    df['etre'] = df['installCount'] / df['startCount']
+    df['ctr1d'] = df['clickCount'] / df['startCount1d']
+    df['vtr1d'] = df['viewCount'] / df['startCount1d']
+    df['etr1d'] = df['installCount'] / df['startCount1d']
+    df['ctr7d'] = df['clickCount'] / df['startCount7d']
+    df['vtr7d'] = df['viewCount'] / df['startCount7d']
+    df['etr7d'] = df['installCount'] / df['startCount7d']
 
     df.fillna(df.median(), inplace=True)
     gc.collect()
