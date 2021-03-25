@@ -1,22 +1,34 @@
 import argparse
-import joblib
 import numpy as np
-from sklearn.ensemble import RandomForestClassifier
+import pandas as pd
+import pickle
+
+from imblearn.ensemble import BalancedBaggingClassifier
+from sklearn.experimental import enable_hist_gradient_boosting
+from sklearn.ensemble import HistGradientBoostingClassifier
 
 
-def train_model(x_train, y_train):
-    x_train_data = np.load(x_train)
-    y_train_data = np.load(y_train)
+def train_model(training_data):
+    clf = BalancedBaggingClassifier(
+        base_estimator=HistGradientBoostingClassifier(random_state=2021),
+        n_estimators=25, random_state=2021
+    )
 
-    model = RandomForestClassifier(n_estimators=10)
-    model.fit(x_train_data, y_train_data)
+    df = pd.read_csv(f'../data/{training_data}')
+    target = df['install']
+    df.drop(['install'], axis=1, inplace=True)
 
-    joblib.dump(model, 'model.pkl')
+    clf.fit(df, target)
+
+    filename = 'finalized_model.sav'
+    pickle.dump(clf, open(filename, 'wb'))
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--x_train')
-    parser.add_argument('--y_train')
-    args = parser.parse_args()
-    train_model(args.x_train, args.y_train)
+    train_model('train_df_processed.csv')
+    print('Model trained and saved')
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument('--x_train')
+    # parser.add_argument('--y_train')
+    # args = parser.parse_args()
+    # train_model(args.x_train, args.y_train)

@@ -1,5 +1,6 @@
 *.pyc
 .env
+*.sav
 
 .DS_Store
 .vscode/*

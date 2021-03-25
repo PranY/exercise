@@ -179,8 +179,15 @@ if __name__ == "__main__":
     train_df[target_var] = target
     del target
     gc.collect()
+
+    mask = np.random.rand(len(train_df)) < 0.8
+    train = train_df[mask]
+    val = train_df[~mask]
+
     print('Saving training dataframe in the data directory as train_df_processed')
-    train_df.to_csv('../data/train_df_processed.csv', index=False)
+    train.to_csv('../data/train_df_processed.csv', index=False)
+    print('Saving validation dataframe in the data directory as val_df_processed')
+    train.to_csv('../data/train_df_processed.csv', index=False)
     print('Preprocessing on training data completed, now starting with the test data')
 
     test_df = preprocess(test_df, 'test')
