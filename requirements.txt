@@ -1,4 +1,8 @@
 pandas
 numpy
 sklearn
-imblearn
+xgboost
+seldon-core
+protobuf
+grpcio
+kfp
