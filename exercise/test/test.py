@@ -1,32 +1,17 @@
-import argparse
-import numpy as np
-import pickle
 import pandas as pd
-from sklearn.metrics import roc_auc_score, log_loss
+from xgboost import XGBClassifier
 
 
-def test_model(test_data, val_data, model_file):
+def test_model(test_data, model_file):
 
-    with open(f'../train/{model_file}', 'rb') as inp:
-        model = pickle.load(inp)
+    model = XGBClassifier(scale_pos_weight=85, max_delta_step=5, learning_rate=0.05,
+                          use_label_encoder=False, random_state=2021,
+                          tree_method='gpu_hist', predictor='gpu_predictor')
 
-    print('Successfully read model, generating predictions stats on validation set')
-    val = pd.read_csv(f'../data/{val_data}')
-    target = val['install']
-    val.drop(['install'], axis=1, inplace=True)
-    val_pred = model.predict_proba(val)
+    model.load_model(f'../train/{model_file}')
 
-    ROC_AUC = roc_auc_score(target, val_pred)
-    LOG_LOSS = log_loss(target, val_pred)
-
-    print(f'\nThe ROC_AUC score on the val set is {ROC_AUC}.\n')
-    print(f'\nThe LOG_LOSS on the val set is {LOG_LOSS}.\n')
-
-    with open('val_output.txt', 'a') as f:
-        f.write(str(f'ROC AUC : {ROC_AUC}'))
-        f.write(str(f'LOG LOSS : {LOG_LOSS}'))
-
-    print('Generating predictions on the test data')
+    print('Successfully read model.')
+    print('Generating predictions on the test data.')
     test = pd.read_csv(f'../data/{test_data}')
     test_pred = model.predict_proba(test)
 
@@ -46,4 +31,4 @@ if __name__ == '__main__':
     # parser.add_argument('--model')
     # args = parser.parse_args()
     test_model('test_df_processed.csv',
-               'val_df_processed.csv', 'finalized_model.sav')
+               'finalized_model.sav')
