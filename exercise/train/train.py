@@ -7,7 +7,7 @@ from sklearn.metrics import roc_auc_score, log_loss
 def train_model(train_data, val_data):
 
     print('Reading training and validation data')
-    train = pd.read_csv(train_data')
+    train = pd.read_csv(train_data)
     val = pd.read_csv(val_data)
 
     y_train = train['install']
