@@ -3,14 +3,11 @@ import numpy as np
 import pandas as pd
 import pickle
 import re
+import sys
 
+from pathlib import Path
 from collections import defaultdict
 from sklearn.preprocessing import LabelEncoder
-
-train_path = '../data/training_data.csv'
-test_path = '../data/test_data.csv'
-delim = ';'
-target_var = 'install'
 
 
 class LabelEncoderExt(object):
@@ -162,34 +159,49 @@ def preprocess(df, tag):
 
 
 if __name__ == "__main__":
-    print(f'Reading training data from {train_path}')
-    train_df = pd.read_csv(train_path, sep=delim, quoting=3,
-                           error_bad_lines=False, warn_bad_lines=True)
-    print(f'Reading test data from {test_path}')
-    test_df = pd.read_csv(test_path, sep=delim, quoting=3,
-                          error_bad_lines=False, warn_bad_lines=True)
 
-    print('Please wait while we preprocess the data')
+    train = Path('data/train_df_processed.csv')
+    val = Path('data/val_df_processed.csv')
+    test = Path('data/test_df_processed.csv')
 
-    target = train_df[target_var]
-    train_df.drop([target_var], axis=1, inplace=True)
+    if train.is_file() and val.is_file() and test.is_file():
+        print('All preprocessed files exists. Exiting the preprocessing step.')
+        sys.exit(0)
+    else:
+        train_path = 'data/training_data.csv'
+        test_path = 'data/test_data.csv'
+        delim = ';'
+        target_var = 'install'
 
-    train_df = preprocess(train_df, 'train')
-    train_df[target_var] = target
-    del target
-    gc.collect()
+        print(f'Reading training data from {train_path}')
+        train_df = pd.read_csv(train_path, sep=delim, quoting=3,
+                               error_bad_lines=False, warn_bad_lines=True)
+        print(f'Reading test data from {test_path}')
+        test_df = pd.read_csv(test_path, sep=delim, quoting=3,
+                              error_bad_lines=False, warn_bad_lines=True)
 
-    mask = np.random.rand(len(train_df)) < 0.8
-    train = train_df[mask]
-    val = train_df[~mask]
+        print('Please wait while we preprocess the data')
 
-    print('Saving training dataframe in the data directory as train_df_processed')
-    train.to_csv('../data/train_df_processed.csv', index=False)
-    print('Saving validation dataframe in the data directory as val_df_processed')
-    train.to_csv('../data/train_df_processed.csv', index=False)
-    print('Preprocessing on training data completed, now starting with the test data')
+        target = train_df[target_var]
+        train_df.drop([target_var], axis=1, inplace=True)
 
-    test_df = preprocess(test_df, 'test')
-    print('Preprocessing on test data completed')
-    print('Saving test dataframe in the data directory as train_df_processed')
-    test_df.to_csv('../data/test_df_processed.csv', index=False)
+        train_df = preprocess(train_df, 'train')
+        train_df[target_var] = target
+        del target
+        gc.collect()
+
+        mask = np.random.rand(len(train_df)) < 0.8
+        train = train_df[mask]
+        val = train_df[~mask]
+
+        print('Saving training dataframe in the data directory as train_df_processed')
+        train.to_csv('data/train_df_processed.csv', index=False)
+        print('Saving validation dataframe in the data directory as val_df_processed')
+        train.to_csv('data/train_df_processed.csv', index=False)
+        print('Preprocessing on training data completed, now starting with the test data')
+
+        test_df = preprocess(test_df, 'test')
+        print('Preprocessing on test data completed')
+        print('Saving test dataframe in the data directory as train_df_processed')
+        test_df.to_csv('data/test_df_processed.csv', index=False)
+        sys.exit(0)

@@ -1,0 +1,6 @@
+# Use this command to allow dockerhub access to create the kubeflow pipeline.
+
+# kubectl create secret docker-registry hub.docker.com \
+#   --docker-username=XXX \
+#   --docker-password=XXX \
+#   --docker-email=XXX

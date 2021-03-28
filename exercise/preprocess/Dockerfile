@@ -4,6 +4,10 @@ RUN pip install -U scikit-learn numpy
 
 WORKDIR /app
 
-COPY preprocess.py ./preprocess.py
+RUN mkdir -p /app/data
+
+COPY . /app
+
+COPY data/* /app/data/
 
 ENTRYPOINT [ "python", "preprocess.py" ]

@@ -1,0 +1,7 @@
+# Use the below command to create a secret to allow fecthing the model for seldon-core.
+
+# kubectl create secret generic test-key \
+#     --from-literal=S3_ENDPOINT='https://myexamplebucket.s3.us-east-2.amazonaws.com/model.bst' \
+#     --from-literal=AWS_ACCESS_KEY_ID="XXX" \
+#     --from-literal=AWS_SECRET_ACCESS_KEY="XXX" \
+#     --from-literal=USE_SSL=false

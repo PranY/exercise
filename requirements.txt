@@ -5,3 +5,10 @@ xgboost
 seldon-core
 protobuf
 grpcio
+kfp
+
+# Non-pip system installations required.
+# docker
+# minikube
+# kubeflow
+# helm

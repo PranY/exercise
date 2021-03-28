@@ -27,4 +27,4 @@ jobs:
       - name: Build the Deploy image
         run: docker build ./deploy --tag prany/exercise_deploy
       - name: Push the Deploy image
-        run: docker push prany/exercise_deploy_model
+        run: docker push prany/exercise_deploy

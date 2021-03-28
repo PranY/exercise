@@ -1,3 +1,4 @@
+import argparse
 import pandas as pd
 from xgboost import XGBClassifier
 from sklearn.metrics import roc_auc_score, log_loss
@@ -6,8 +7,8 @@ from sklearn.metrics import roc_auc_score, log_loss
 def train_model(train_data, val_data):
 
     print('Reading training and validation data')
-    train = pd.read_csv(f'../data/{train_data}')
-    val = pd.read_csv(f'../data/{val_data}')
+    train = pd.read_csv(train_data')
+    val = pd.read_csv(val_data)
 
     y_train = train['install']
     train.drop(['install'], axis=1, inplace=True)
@@ -42,10 +43,9 @@ def train_model(train_data, val_data):
 
 
 if __name__ == '__main__':
-    train_model('train_df_processed.csv', 'val_df_processed.csv')
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--train_data')
+    parser.add_argument('--val_data')
+    args = parser.parse_args()
+    train_model(args.train_data, args.val_data)
     print('Model trained and saved')
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument('--x_train')
-    # parser.add_argument('--y_train')
-    # args = parser.parse_args()
-    # train_model(args.x_train, args.y_train)
